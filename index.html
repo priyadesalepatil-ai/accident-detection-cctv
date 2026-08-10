@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VisionGuard AI - Real-Time CCTV Traffic Accident & Anomaly Detection System</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="brand-container">
+      <div class="brand-logo">
+        <i class="fa-solid fa-shield-cat"></i>
+      </div>
+      <div>
+        <h1 class="brand-title">VisionGuard AI</h1>
+        <div class="brand-subtitle">CCTV Accident & Anomaly Vision System</div>
+      </div>
+    </div>
+
+    <div class="header-status">
+      <div class="status-badge" id="systemStatusBadge">
+        <span class="pulse-dot"></span>
+        <span id="statusBadgeText">SYSTEM OPERATIONAL</span>
+      </div>
+
+      <button class="btn-action" id="toggleAudioBtn" title="Toggle Alarm Sound">
+        <i class="fa-solid fa-volume-high" id="audioIcon"></i>
+        <span>Audio Alerts</span>
+      </button>
+
+      <button class="btn-action btn-danger" id="manualSosBtn">
+        <i class="fa-solid fa-truck-medical"></i>
+        <span>Trigger Emergency SOS</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Grid -->
+  <main class="dashboard-grid">
+    
+    <!-- Left Column: Video Viewport & Telemetry -->
+    <section class="main-viewport-panel">
+      
+      <!-- Video Viewport Card -->
+      <div class="video-container-card">
+        <div class="viewport-header">
+          <div class="cam-title-group">
+            <i class="fa-solid fa-video text-cyan" style="color: var(--accent-cyan);"></i>
+            <select id="cameraSourceSelect" class="cam-selector-select">
+              <option value="simulated">CAM-01: Main Intersection CCTV (Demo AI Simulation)</option>
+              <option value="preset_traffic">CAM-02: Multi-Lane Highway Traffic Stream</option>
+              <option value="preset_roundabout">CAM-03: Urban Roundabout Surveillance</option>
+              <option value="custom_file">📁 Custom Uploaded Video File</option>
+            </select>
+          </div>
+
+          <div class="viewport-actions">
+            <label for="videoFileInput" class="btn-action" style="cursor: pointer;">
+              <i class="fa-solid fa-file-video"></i> Upload Clip
+              <input type="file" id="videoFileInput" accept="video/*" style="display: none;">
+            </label>
+
+            <button class="btn-action" id="triggerSimulatedCrashBtn" title="Test collision detection algorithm">
+              <i class="fa-solid fa-car-burst" style="color: var(--accent-red);"></i> Test Crash
+            </button>
+
+            <button class="btn-action" id="captureSnapshotBtn">
+              <i class="fa-solid fa-camera"></i> Snapshot
+            </button>
+          </div>
+        </div>
+
+        <!-- Video Canvas Overlay Stack -->
+        <div class="video-canvas-wrapper">
+          <!-- Video Element for media file inputs -->
+          <video id="mainVideoPlayer" autoplay loop muted playsinline style="display: none;"></video>
+          
+          <!-- Primary Vision Analysis Overlay Canvas -->
+          <canvas id="visionCanvasOverlay" width="1280" height="720"></canvas>
+
+          <!-- Top HUD Flash Alert Banner -->
+          <div class="hud-alert-banner" id="hudAlertBanner">
+            <i class="fa-solid fa-triangle-exclamation fa-lg"></i>
+            <span id="hudAlertText">ACCIDENT DETECTED - HIGH IMPACT COLLISION</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Telemetry Row -->
+      <div class="telemetry-row">
+        <div class="metric-card">
+          <div class="metric-label">Crash Risk Score</div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="riskScoreVal" style="color: var(--accent-green);">14%</span>
+            <span class="metric-sub" id="riskLevelText">LOW RISK</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Tracked Objects</div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="trackedObjCountVal">4</span>
+            <span class="metric-sub">Vehicles</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Average Speed</div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="avgSpeedVal">48.5</span>
+            <span class="metric-sub">km/h</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Vision Engine FPS</div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="fpsVal">60.0</span>
+            <span class="metric-sub">FPS</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Sidebar Panel: Real-Time Charts & Incident Log -->
+    <aside class="sidebar-panel">
+      
+      <!-- Live Risk Index Chart -->
+      <div class="sidebar-card">
+        <div class="card-header-title">
+          <span><i class="fa-solid fa-chart-line text-cyan" style="color: var(--accent-cyan); margin-right: 8px;"></i> Live Crash Risk Index</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Real-time Telemetry</span>
+        </div>
+        <div style="height: 180px; position: relative;">
+          <canvas id="riskTelemetryChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Detected Incidents Log -->
+      <div class="sidebar-card" style="flex: 1; display: flex; flex-direction: column;">
+        <div class="card-header-title">
+          <span><i class="fa-solid fa-clock-rotate-left text-red" style="color: var(--accent-red); margin-right: 8px;"></i> Incident Audit Log</span>
+          <button class="btn-action" id="exportAuditLogBtn" style="padding: 4px 8px; font-size: 0.75rem;">
+            <i class="fa-solid fa-download"></i> Export JSON
+          </button>
+        </div>
+
+        <div class="incident-log-list" id="incidentLogList">
+          <!-- Dynamic Log Entries injected here -->
+          <div class="incident-item">
+            <div class="incident-item-header">
+              <span><i class="fa-solid fa-circle-check" style="color: var(--accent-green);"></i> System Online</span>
+              <span class="incident-time">Just Now</span>
+            </div>
+            <div class="incident-desc">CCTV Feed analysis initialized. Monitoring active traffic lanes.</div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- Emergency Dispatch Modal -->
+  <div class="modal-overlay" id="sosModal">
+    <div class="modal-box">
+      <h2 class="modal-title">
+        <i class="fa-solid fa-siren-on"></i> Emergency SOS Dispatch
+      </h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">
+        Accident severity algorithm triggered high-priority dispatch protocol.
+      </p>
+
+      <div class="modal-field">
+        <span class="label">Incident Location</span>
+        <strong id="sosLocationText">CAM-01: Main Intersection (Lat 28.6139, Lon 77.2090)</strong>
+      </div>
+
+      <div class="modal-field">
+        <span class="label">Collision Classification</span>
+        <strong id="sosCollisionTypeText" style="color: var(--accent-red);">High-Impact Multi-Vehicle Collision</strong>
+      </div>
+
+      <div class="modal-field">
+        <span class="label">Collision Severity Score</span>
+        <strong id="sosSeverityScoreText">94 / 100 (CRITICAL)</strong>
+      </div>
+
+      <div class="modal-buttons">
+        <button class="btn-confirm-sos" id="confirmSosBtn">
+          <i class="fa-solid fa-paper-plane"></i> Dispatch Emergency Response Units
+        </button>
+        <button class="btn-cancel" id="closeSosBtn">Dismiss</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Scripts -->
+  <script src="js/vision_engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
