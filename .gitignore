@@ -1,0 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Output incident snapshots
+detected_incidents/
+*.jpg
+*.png
+
+# Virtual environment
+venv/
+env/
+.env
+
+# IDE / OS files
+.DS_Store
+.vscode/
+.idea/
