@@ -1,0 +1,477 @@
+/* VisionGuard AI - CCTV Accident Detection Dashboard Styling */
+:root {
+  --bg-dark: #0a0d14;
+  --bg-card: rgba(18, 24, 38, 0.75);
+  --bg-card-hover: rgba(26, 35, 56, 0.85);
+  --border-color: rgba(56, 75, 112, 0.35);
+  --accent-cyan: #00f2fe;
+  --accent-blue: #4facfe;
+  --accent-green: #10b981;
+  --accent-yellow: #f59e0b;
+  --accent-red: #ef4444;
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --glass-glow: 0 8px 32px 0 rgba(0, 242, 254, 0.12);
+  --font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(0, 242, 254, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(239, 68, 68, 0.05) 0%, transparent 40%);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Header & Top Bar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(10, 13, 20, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 1.4rem;
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+}
+
+.brand-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-subtitle {
+  font-size: 0.75rem;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--accent-green);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status-badge.alert-active {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: var(--accent-red);
+  animation: pulse-red 1.5s infinite;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor;
+  box-shadow: 0 0 10px currentColor;
+}
+
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* Main Dashboard Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  flex: 1;
+}
+
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Main Monitoring Panel */
+.main-viewport-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.video-container-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--glass-glow);
+}
+
+.viewport-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.cam-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cam-selector-select {
+  background: rgba(15, 23, 42, 0.8);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.viewport-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-action {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-action:hover {
+  background: rgba(0, 242, 254, 0.15);
+  border-color: var(--accent-cyan);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+}
+
+.btn-danger:hover {
+  background: rgba(239, 68, 68, 0.4);
+  border-color: var(--accent-red);
+  color: #fff;
+}
+
+/* Video Frame Canvas Stack */
+.video-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#mainVideoPlayer {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+#visionCanvasOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* HUD Overlay Banner */
+.hud-alert-banner {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(239, 68, 68, 0.9);
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+  opacity: 0;
+  transform: translate(-50%, -20px);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.hud-alert-banner.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Telemetry Grid below Video */
+.telemetry-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.metric-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metric-value-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.metric-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.metric-sub {
+  font-size: 0.75rem;
+  color: var(--accent-cyan);
+}
+
+/* Sidebar Analytics & Controls */
+.sidebar-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sidebar-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.25rem;
+  backdrop-filter: blur(12px);
+}
+
+.card-header-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Incident Log Timeline */
+.incident-log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.incident-item {
+  background: rgba(15, 23, 42, 0.6);
+  border-left: 4px solid var(--accent-cyan);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.incident-item:hover {
+  background: var(--bg-card-hover);
+}
+
+.incident-item.critical {
+  border-left-color: var(--accent-red);
+}
+
+.incident-item.warning {
+  border-left-color: var(--accent-yellow);
+}
+
+.incident-item-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.incident-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.incident-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Modal Popup */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(5, 8, 15, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-box {
+  background: #111726;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 540px;
+  padding: 2rem;
+  box-shadow: 0 0 50px rgba(239, 68, 68, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modal-title {
+  color: var(--accent-red);
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+}
+
+.modal-field span.label {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+.btn-confirm-sos {
+  flex: 1;
+  background: var(--accent-red);
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
